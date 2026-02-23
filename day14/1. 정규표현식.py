@@ -236,53 +236,89 @@ pattern = re.compile(r"\w{3,4}\s01[01]-\d{3,4}-\d{4}")
 # 문자열안에서 사용되는 \들을 이스케이프문자가아닌 일반 문자로 취급하는 문자열 --> 특수문자의 뜻이 아닌 리터럴문자로 인식하는 문자열
 match_data = pattern.match("park 010-1234-5678")
 print(match_data)
+#<re.Match object; span=(0, 18), match='park 010-1234-5678'>
+
+
+pattern = re.compile(r"(\w{3,4})\s(01[01])-(\d{3,4})-(\d{4})")
+# 메타문자를 적용시키는 것뿐아니라 데이터를 가져오고 싶은 부분에 그룹화를 한다.
+match_data = pattern.match("park 010-1234-5678")
+print(match_data)
+# <re.Match object; span=(0, 18), match='park 010-1234-5678'>
+
+# group(n) 메서드
+# 매치객체에서 사용할 수 있는 메서드
+# 매치된 데이터에서 n번째 그룹에 해당하는 데이터를 반환하는 메서드
+print(match_data.group(1)) # park
+print(match_data.group(2)) # 010
+print(match_data.group(3)) # 1234
+print(match_data.group(4)) # 5678
+print(match_data.group(0)) # park 010-1234-5678
+# group(0)은 매치된 부분 전체의 데이터를 가지고 있다.
+
+
+# 그룹화된 문자열 재참조 하기
+# 정규식내에서 그룹이 생성되어있다면 생성된 그룹으로 들어오는 문자열을 참조하여 정규식에 사용할 수 있다.
+
+# pattern = re.compile(r'(\w+) \1') # ---> (\w+) (\w+)와는 다르다!
+# # \그룹인덱스
+# # 작성한 그룹의 정규식에 매치되는 데잍와 일치하는 데이터일 때 통과되는 참조문
+#
+# print(pattern.match("korea korea"))
+# # <re.Match object; span=(0, 11), match='korea korea'>
+# print(pattern.match("korea it"))
+# # None
+#
+# pattern = re.compile(r'(\w+) (\w+)')
+# print(pattern.match("korea korea"))
+# # <re.Match object; span=(0, 11), match='korea korea'>
+# print(pattern.match("korea it"))
+# # <re.Match object; span=(0, 8), match='korea it'>
+
+
+# 그룹명 짓고 사용하기
+# 형태
+# (?P<그룹명>정규식)
+
+pattern = re.compile(r'(?P<temp>\w+) (?P=temp)')
+print(pattern.match("korea korea"))
+# <re.Match object; span=(0, 11), match='korea korea'>
+print(pattern.match("korea it"))
+# None
+
+
+# ex) sub
+
+data = "123456-9876543"
+# 주민등록번호
+# "123456-9******"
+pattern = re.compile(r"(\d{6})-(\d)(\d{6})")
+# pattern = re.compile(r"(\d{6}-\d)(\d{6})")
+print(pattern.sub(r"\1-\2******",data))
+# 123456-9******
+print(pattern.sub(r"\g<1>-\g<2>******",data))
+# 123456-9******
 
 
 
 
+# 사용자의 이메일의 일부분(아이디의 첫 5글자)을 마스킹 처리해보자
 
+emails = [
+    "user12345@naver.com",
+    "johndoe123@gmail.com",
+    "helloworld@daum.net"
+]
 
+# [출력결과]
+# *****2345@naver.com
+# *****oe123@gmail.com
+# *****world@daum.net
 
+# pattern = re.compile(r'^\w{5}\w+@.+')
+pattern = re.compile(r'^[a-zA-Z0-9]{5}(\w+)(@\w+)')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+for i in emails:
+    print(pattern.sub(r"*****\1\2", i))
 
 
 
