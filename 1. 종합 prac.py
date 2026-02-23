@@ -48,7 +48,7 @@ print("문제 2번 \n")
 scan_num = int(input("숫자를 하나 입력해주세요 : "))
 n = 0
 total = 0
-while scan_num > total:
+while scan_num >= total:
     n += 1
     total += n
 print(f'n : {n}')
@@ -101,16 +101,25 @@ avg_mid([10, 30, 30, 40, 60])
 
 '''
 
-print("문제 4번 \n")
+# print("문제 4번 \n")
+#
+# avg_mid = [10, 30, 30, 40, 60]
+# sum = 0
+# for i in range(len(avg_mid)):
+#     sum += avg_mid[i]
+# print(f'평균 : {sum/len(avg_mid)}, 중앙값 : {avg_mid[2]}')
+#
+# print("\n\n\n")
 
-avg_mid = [10, 30, 30, 40, 60]
-sum = 0
-for i in range(len(avg_mid)):
-    sum += avg_mid[i]
-print(f'평균 : {sum/len(avg_mid)}, 중앙값 : {avg_mid[2]}')
+def avg_mid(data) :
+    data_sum = 0
+    for i in data :
+         data_sum += i
 
-print("\n\n\n")
-
+    # sum() : iterable의 요소의 합계를 구해주는 함수
+    # data_sum == sum(data)
+    print(f'평균 : {data_sum/ len(data)}, 중앙값 : {sorted(data)[len(data)/2]}')
+avg_mid([10, 30, 30, 40, 60])
 
 # 5번
 '''
@@ -133,11 +142,19 @@ print("문제 5번 \n")
 s = "The quick brown fox jumps over lazy dogs"
 n = int(input("숫자를 입력하세요 >> "))
 result = []
+
 for i in range(0,len(s),n):
     result.append(s[i:i+n])
 print(result)
 print("\n\n\n")
+# 슬라이싱 과정에선 도착 인덱스가 인덱스의 범위를 벗어나도 오류가 발생하지 않는다
 
+# while문 풀이방법
+# start = 0
+# while start < len(s):
+#     result.append(s[i:i+n])
+#     start += n
+# print(result)
 
 # 6 번
 '''
@@ -154,6 +171,10 @@ print("\n\n\n")
 윤년입니다!
 
 '''
+
+### 조건식은 위에서 확인하면서 가장 먼저  True로 통과된 조건식 하나만 실행된다!!! ###
+##### 우선순위가 높은 조건식을 위에 작성한다
+
 print("문제 6번 \n")
 year = int(input("년도를 입력하세요 :"))
 if year % 4 == 0 :
@@ -166,7 +187,18 @@ if year % 4 == 0 :
         print("윤년입니다")
 else :
     print("윤년이 아닙니다")
+
+# if year % 400 == 0:
+#     print("윤년입니다")
+# elif year % 100 == 0:
+#     print("평년입니다")
+# elif year % 4 == 0:
+#     print("윤년입니다")
+# else : print("평년입니다")
+
 print("\n\n\n")
+
+
 
 # 7번
 '''
@@ -202,6 +234,7 @@ for i in range(501,1000):
 print(f'500과 1000사이에 있는 홀수의 합계 : {result}')
 print("\n\n\n")
 
+
 print("문제 7-2번 \n")
 str_num = 9284637913
 total = 0
@@ -210,6 +243,21 @@ while str_num > 0:
     str_num //= 10
 print(total)
 print("\n\n\n")
+# # ---> 이런 문자들은 문자열로 바꿔서 문제를 푸는게 더 이상적임!
+# num  ="9284637913"
+# # iterable 데이터!
+# result = 0
+# for i in num :
+#     result += int(i)
+'''
+---> 여기서 num은 길이만큼인데 왜 i를 int로 바꿔야하는거죠..?
+어짜피 지금 i는 숫자 아닌가요???
+문자로 입력받는다고 하더라도 print할때 문자로 출력을 하니깐 안 적어도 되는거 아닌가?
+'''
+# print result
+# 내가 입력받는 데이터의 종류
+# 입력받은 데이터를 그대로 쓸지, 내가 원라는 다흔 데이터 형식으로 바꾸어서 ㅆ ㅡㄹ지
+# 완성된 데이터를 어떤 형태로 다시 반환할지
 
 print("문제 7-3번 \n")
 n = int(input("숫자 n :"))
@@ -227,6 +275,16 @@ else :
     print(f'1~{n}까지의 홀수의 합 :{sum}')
 
 print("\n\n\n")
+
+# if n % 2 :
+#     odd_set = 1
+# else :
+#     odd_set = 0
+#
+# odd_set = 1 if n %2 else 2
+# result = sum(range(odd_set,n+1,2))
+# print(result)
+
 
 # 8번
 '''
@@ -254,6 +312,25 @@ check_time("14 30 0", 200)
 #
 # check_time("14 30 0", 200)
 # if self
+
+def check_time(crrent,second) :
+     time_split = crrent.split()
+     h = int(time_split[0])
+     m = int(time_split[1])
+     s = int(time_split[2])
+
+     total_second = h * 60 * 60 + m * 60 + s # current를 초로 변환
+     end_second = total_second + second
+     # 하루(24시간)
+     day = 24 * 60 * 60 # 하루를 초로 변환한 값
+     end_second %= day # 시간만 표현하는 문제기에 하루를 넘어선 값은 제거
+     end_h = end_second // (60 * 60)
+     end_second %= 60 * 60
+     end_m = end_second // (60)
+     end_second %= 60
+     print(f'{end_h}시 {end_m}분 {end_second}에 완료')
+
+check_time("14 30 0", 200)
 
 # 9번
 '''
@@ -315,12 +392,28 @@ alphabet_count("Hello world")
 입니다.
 
 '''
-# import re
-# pattern = re.compile('[a-zA-Z]')
-# alphabet_count = "Hello world"
-# print(alphabet_count.lower())
-# print(alphabet_count.replace(" ", ""))
-# print(pattern.findall(alphabet_count))
+def alphabet_count(string):
+    string = string.lower() #입력받은 영문을 소문자로 변환
+    alphabet_dict = {} #결과를 저장할 dict
+    for char in string:
+        if 'a' <= char <= 'z': #char이 알파벳인지 확인 # 가 <= char <= 힣 <--- 한글인지 확인할 수 잇슨!
+        # sorted() 했을 때 문자열은 사전 순서대로 정렬되는 것을 확인
+        # ==> 기본적으로 문자열은 사전순서를 기준으로 크기 비교를 한다!
+            if char.isalpha(): # 문자열 데이터가 알파벳인지 확인하는 메서드
+                # isdeciaml() : 문자열 데이터가 숫자인지 확인하는 메서드
+                # is___()  : 문자열이 ___데이터인지 확인하는 메서드
+        #     if char in alphabet_dict:
+        #         alphabet_dict[char] += 1
+        #     else :
+        #         alphabet_dict[char] = 1
+        # ----> get() 메서드
+        alphabet_dict[char] += alphabet_dict.get(char,0)+1
+    print("사용된 알파벳은")
+    for key in alphabet_dict:
+        print(f'{key} : {alphabet_dict[key]}회')
+    print("입니다")
+alphabet_count("Hello world")
+
 
 # 11번
 '''
@@ -361,7 +454,19 @@ print(f'결과 : {result}')
 
 index = [0, 3, 6, 9, 12, 14, 17, 19, 21]
 '''
+string = "agobodw perosgwra2m4mser"
+index = [0, 3, 6, 9, 12, 14, 17, 19, 21]
+str_list = []
+for inx,char in enumerate(string):
+    if not (inx in index): # 인덱스에 존재하지 않는 문자만 추가
+        str_list.append(char)
+print("".join(str_list))
 
+# 리스트 내포
+# interable을 생성할 때 for문을 사용할 수 있다
+# [표현식 for문 조건식]
+result = [char for inx, char in enumerate(string) if not (inx in index)]
+print("".join(result))
 
 # 13번
 '''
@@ -378,7 +483,11 @@ test([2,4,8])
 16.0
 
 '''
-
+def test(num_list):
+    if num_list[2] - num_list[1] == num_list[1] - num_list[0] : # 등차수열
+        print(num_list[len(num_list) - 1]+(num_list[1]-num_list[0]))
+    else : # 등비수열
+        print(num_list[len(num_list) - 1] * (num_list[1] - num_list[0]))
 
 # 14번
 '''
